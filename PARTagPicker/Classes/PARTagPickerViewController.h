@@ -60,6 +60,11 @@ typedef NS_ENUM(NSUInteger, PARTagPickerVisibilityState) {
 @property (nonatomic) BOOL allowsNewTags;
 
 /**
+ * If this is set, a custom UITextField is present and allows for searching for a tag. Otherwise, no UITextField is present and searching is disabled.
+ */
+@property (nonatomic, assign) BOOL allowsTagSearching;
+
+/**
  *  enum that will help you figure the view's content size.
  */
 @property (nonatomic) PARTagPickerVisibilityState visibilityState;

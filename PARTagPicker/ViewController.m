@@ -40,7 +40,10 @@
     self.tagPicker.view.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     self.tagPicker.delegate = self;
     self.tagPicker.allTags = self.allTags;
-    
+
+	//optionally allow searching for tags (defaults to YES)
+	//self.tagPicker.allowsTagSearching = NO;
+
     //optionally allow new tags to be made
     //self.tagPicker.allowsNewTags = YES;
     

@@ -55,6 +55,7 @@ static NSString * const PARTextFieldCollectionViewCellIdentifier = @"PARTextFiel
     [self setupCollectionViews];
     self.chosenTags = [NSMutableArray array];
     self.visibilityState = PARTagPickerVisibilityStateTopOnly;
+	self.allowsTagSearching = YES;
 }
 
 #pragma mark - Forced Updates
@@ -126,6 +127,16 @@ static NSString * const PARTextFieldCollectionViewCellIdentifier = @"PARTextFiel
         [self.delegate tagPicker:self visibilityChangedToState:visibilityState];
 
     }
+}
+
+- (void)setAllowsTagSearching:(BOOL)allowsTagSearching
+{
+	_allowsTagSearching = allowsTagSearching;
+	if (allowsTagSearching == NO) {
+		self.visibilityState = PARTagPickerVisibilityStateTopAndBottom;
+	}
+
+	[self reloadCollectionViews];
 }
 
 #pragma mark - Tag Filtering
@@ -244,14 +255,18 @@ static NSString * const PARTextFieldCollectionViewCellIdentifier = @"PARTextFiel
         return self.filteredAvailableTags.count;
     }
     if (collectionView == self.chosenTagCollectionView) {
-        return self.chosenTags.count + 1;
+		if (self.allowsTagSearching) {
+			return self.chosenTags.count + 1;
+		} else {
+			return self.chosenTags.count;
+		}
     } else {
         return 0;
     }
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (collectionView == self.chosenTagCollectionView && indexPath.row == self.chosenTags.count) {
+    if (collectionView == self.chosenTagCollectionView && indexPath.row == self.chosenTags.count && self.allowsTagSearching) {
         PARTextFieldCollectionViewCell *textFieldCell = [collectionView dequeueReusableCellWithReuseIdentifier:PARTextFieldCollectionViewCellIdentifier forIndexPath:indexPath];
         self.cellTextField = textFieldCell.tagTextField;
         textFieldCell.useFilteringColors = !self.allowsNewTags;
